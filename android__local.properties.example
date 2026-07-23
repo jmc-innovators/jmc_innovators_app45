@@ -1,0 +1,10 @@
+# Copy this file to `local.properties` (same folder) and adjust the paths
+# for your machine. `local.properties` is machine-specific and is
+# intentionally gitignored — Codemagic and most CI systems generate it
+# automatically, so you normally don't need to touch this on CI.
+
+sdk.dir=/Users/you/Library/Android/sdk
+flutter.sdk=/Users/you/flutter
+flutter.buildMode=debug
+flutter.versionName=1.0.0
+flutter.versionCode=1

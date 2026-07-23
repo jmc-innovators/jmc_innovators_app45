@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Keep the default flutter_lints rule set. Add project-specific
+    # overrides below as needed, e.g.:
+    # avoid_print: false
+    # prefer_single_quotes: true
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"

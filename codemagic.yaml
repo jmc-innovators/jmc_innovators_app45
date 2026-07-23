@@ -1,0 +1,90 @@
+workflows:
+  android-apk:
+    name: Android APK (debug/CI build)
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      android_signing:
+        - keystore_reference  # Configure in Codemagic UI once you have a release keystore; safe to leave unset for debug builds.
+      vars:
+        PACKAGE_NAME: "com.jmcinnovators.learning_platform"
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Build APK
+        script: |
+          flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/mapping/release/mapping.txt
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+        notify:
+          success: true
+          failure: true
+
+  android-appbundle:
+    name: Android App Bundle (Play Store)
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      android_signing:
+        - keystore_reference
+      vars:
+        PACKAGE_NAME: "com.jmcinnovators.learning_platform"
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Build AAB
+        script: |
+          flutter build appbundle --release
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+
+  ios-workflow:
+    name: iOS (unsigned build)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Install CocoaPods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Build iOS (no code signing)
+        script: |
+          flutter build ios --release --no-codesign
+    artifacts:
+      - build/ios/iphoneos/*.app
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+
+# Notes:
+# - This app currently ships with Firebase.initializeApp() commented out in
+#   lib/main.dart, so these workflows build without needing
+#   google-services.json / GoogleService-Info.plist. See README.md for how
+#   to wire Firebase in (and add those files as encrypted Codemagic
+#   environment files) once you're ready.
+# - For a signed release APK/AAB, add your keystore under Codemagic's
+#   Team settings > Code signing identities, then reference it via
+#   `android_signing: - your_keystore_name`.
+# - For a signed, App Store-ready iOS build, add your distribution
+#   certificate + provisioning profile under Codemagic's iOS code signing
+#   settings and switch `--no-codesign` to Codemagic's automatic signing.

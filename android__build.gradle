@@ -1,0 +1,39 @@
+// AGP and Kotlin plugin versions are declared once in settings.gradle's
+// `plugins {}` block (pluginManagement) and simply applied without a
+// version in android/app/build.gradle — that's the current Flutter
+// template style, so there's no buildscript{} classpath duplication here.
+ext.kotlin_version = '1.9.24'
+
+// Uncomment this whole block, and the matching
+// `id "com.google.gms.google-services"` plugin line in
+// android/app/build.gradle, once you've added
+// android/app/google-services.json and want to initialize Firebase
+// (see README.md, "Enabling Firebase for real").
+// buildscript {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+//     dependencies {
+//         classpath 'com.google.gms:google-services:4.4.2'
+//     }
+// }
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
