@@ -77,6 +77,9 @@ workflows:
           - your-email@example.com
 
 # Notes:
+# - This file assumes pubspec.yaml, android/, ios/, and lib/ all sit at the
+#   ROOT of the git repository (no subfolder), matching the reconstructed
+#   project structure below. No working_directory is needed.
 # - This app currently ships with Firebase.initializeApp() commented out in
 #   lib/main.dart, so these workflows build without needing
 #   google-services.json / GoogleService-Info.plist. See README.md for how
